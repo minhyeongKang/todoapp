@@ -14,10 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,16 +27,18 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/user/signup")
-    public void signup(SignupRequestDto signupRequestDto) {
+    @ResponseBody
+    public void signup(@RequestBody SignupRequestDto signupRequestDto) {
         try {
             userService.signup(signupRequestDto);
         } catch (Exception e) {
-            log.error("회원가입을 다시 해주세요.");
+            log.error("회원가입에 실패했습니다. 다시해 주세요.");
         }
     }
 
     @PostMapping("/user/login")
-    public void login(LoginRequestDto loginRequestDto, HttpServletResponse res) {
+    @ResponseBody
+    public void login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse res) {
         try {
             userService.login(loginRequestDto, res);
         } catch (Exception e) {
