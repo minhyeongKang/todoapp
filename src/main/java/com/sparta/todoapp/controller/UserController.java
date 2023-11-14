@@ -1,10 +1,12 @@
 package com.sparta.todoapp.controller;
 
+import com.sparta.todoapp.dto.LoginRequestDto;
 import com.sparta.todoapp.dto.SignupRequestDto;
 import com.sparta.todoapp.dto.UserInfoDto;
 import com.sparta.todoapp.entity.UserRoleEnum;
 import com.sparta.todoapp.security.UserDetailsImpl;
 import com.sparta.todoapp.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,30 +29,22 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/user/login-page")
-    public String loginPage() {
-        return "login";
-    }
-
-    @GetMapping("/user/signup")
-    public String signupPage() {
-        return "signup";
-    }
-
     @PostMapping("/user/signup")
-    public String signup(@Valid SignupRequestDto requestDto, BindingResult bindingResult) {
-        // Validation 예외처리
-        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-        if(fieldErrors.size() > 0) {
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
-            }
-            return "redirect:/api/user/signup";
+    public void signup(SignupRequestDto signupRequestDto) {
+        try {
+            userService.signup(signupRequestDto);
+        } catch (Exception e) {
+            log.error("회원가입을 다시 해주세요.");
         }
+    }
 
-        userService.signup(requestDto);
-
-        return "redirect:/api/user/login-page";
+    @PostMapping("/user/login")
+    public void login(LoginRequestDto loginRequestDto, HttpServletResponse res) {
+        try {
+            userService.login(loginRequestDto, res);
+        } catch (Exception e) {
+            log.error("아이디/비밀번호를 확인해주세요.");
+        }
     }
 
     // 회원 관련 정보 받기

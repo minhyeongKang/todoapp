@@ -24,40 +24,45 @@ public class UserService {
     // ADMIN_TOKEN
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
-    public void signup(SignupRequestDto requestDto) {
-        String username = requestDto.getUsername();
-        String password = passwordEncoder.encode(requestDto.getPassword());
+    public void signup(SignupRequestDto RequestDto) {
+        String username = RequestDto.getUsername();
+        String password = passwordEncoder.encode(RequestDto.getPassword());
+        System.out.println("1");
 
         // 회원 중복 확인
         Optional<User> checkUsername = userRepository.findByUsername(username);
         if (checkUsername.isPresent()) {
             throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
         }
+        System.out.println("2");
 
         // email 중복확인
-        String email = requestDto.getEmail();
+        String email = RequestDto.getEmail();
         Optional<User> checkEmail = userRepository.findByEmail(email);
         if (checkEmail.isPresent()) {
             throw new IllegalArgumentException("중복된 Email 입니다.");
         }
+        System.out.println("3");
 
         // 사용자 ROLE 확인
         UserRoleEnum role = UserRoleEnum.USER;
-        if (requestDto.isAdmin()) {
-            if (!ADMIN_TOKEN.equals(requestDto.getAdminToken())) {
+        if (RequestDto.isAdmin()) {
+            if (!ADMIN_TOKEN.equals(RequestDto.getAdminToken())) {
                 throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
             }
             role = UserRoleEnum.ADMIN;
         }
+        System.out.println("4");
 
         // 사용자 등록
         User user = new User(username, password, email, role);
         userRepository.save(user);
+        System.out.println("5");
     }
 
-    public void login(LoginRequestDto requestDto, HttpServletResponse res) {
-        String username = requestDto.getUsername();
-        String password = requestDto.getPassword();
+    public void login(LoginRequestDto RequestDto, HttpServletResponse res) {
+        String username = RequestDto.getUsername();
+        String password = RequestDto.getPassword();
 
         // 사용자 확인
         User user = userRepository.findByUsername(username).orElseThrow(
