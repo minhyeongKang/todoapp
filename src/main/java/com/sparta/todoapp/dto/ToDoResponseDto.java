@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public class ToDoResponseDto {
     private Long id;
     private String username;
+    private String password;
     private String title;
     private String contents;
     private LocalDateTime createAt;
@@ -17,6 +18,7 @@ public class ToDoResponseDto {
     public ToDoResponseDto(ToDo toDo) {
         this.id = toDo.getId();
         this.username = toDo.getUsername();
+        this.password = toDo.getPassword();
         this.title = toDo.getTitle();
         this.contents = toDo.getContents();
         this.createAt = toDo.getCreatedAt();

@@ -5,36 +5,38 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @Table(name = "todocard")
-public class ToDo extends User {
+public class ToDo extends Timestamped {
 
-    @Column(name = "title", nullable = false, length = 500)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
     private String title;
 
-    @Column(name = "contents", nullable = false, length = 500)
+    @Column(nullable = false, length = 500)
     private String contents;
 
-    @CreatedDate
-    @Column(updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @LastModifiedDate
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime modifiedAt;
-
-    public ToDo(ToDoRequestDto toDoRequestDto) {
-        super();
+    public ToDo(ToDoRequestDto toDoRequestDto, User user) {
+        this.username = toDoRequestDto.getUsername();
+        this.password = toDoRequestDto.getPassword();
+        this.title = toDoRequestDto.getTitle();
         this.contents = toDoRequestDto.getContents();
     }
 

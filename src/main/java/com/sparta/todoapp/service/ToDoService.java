@@ -3,6 +3,7 @@ package com.sparta.todoapp.service;
 import com.sparta.todoapp.dto.ToDoRequestDto;
 import com.sparta.todoapp.dto.ToDoResponseDto;
 import com.sparta.todoapp.entity.ToDo;
+import com.sparta.todoapp.entity.User;
 import com.sparta.todoapp.repasitory.ToDoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,15 +17,11 @@ public class ToDoService {
 
     private final ToDoRepository toDoRepository;
 
-    public ToDoResponseDto createToDo(ToDoRequestDto toDoRequestDto) {
-        // RequestDto -> Entity
-        ToDo toDo = new ToDo(toDoRequestDto);
-        // DB 저장
-        ToDo saveToDo = toDoRepository.save(toDo);
-        // Entity -> ResponseDto
-        ToDoResponseDto toDoResponseDto = new ToDoResponseDto(toDo);
+    public ToDoResponseDto createToDoCard(ToDoRequestDto toDoRequestDto, User user) {
 
-        return toDoResponseDto;
+        ToDo toDo = toDoRepository.save(new ToDo(toDoRequestDto, user));
+
+        return new ToDoResponseDto(toDo);
     }
 
     public List<ToDoResponseDto> getToDoCards() {
@@ -33,7 +30,7 @@ public class ToDoService {
     }
 
     @Transactional
-    public Long updateToDocard(Long id, ToDoRequestDto toDoRequestDto) {
+    public Long updateToDoCard(Long id, ToDoRequestDto toDoRequestDto) {
         // 해당 할일카드가 DB에 존재하는지 확인
         ToDo toDo = findToDoCard(id);
         // 할일카드 내용 수정
@@ -42,7 +39,7 @@ public class ToDoService {
         return id;
     }
 
-    public Long deleteToDocard(Long id, ToDoRequestDto toDoRequestDto) {
+    public Long deleteToDoCard(Long id) {
         // 해당 할일카드가 DB에 존재하는지 확인
         ToDo toDo = findToDoCard(id);
         // 할일카드 삭제
