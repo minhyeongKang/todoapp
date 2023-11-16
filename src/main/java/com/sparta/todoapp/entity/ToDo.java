@@ -17,12 +17,6 @@ public class ToDo extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String username;
-
-    @Column(nullable = false)
-    private String password;
-
     @Column(nullable = false)
     private String title;
 
@@ -34,10 +28,9 @@ public class ToDo extends Timestamped {
     private User user;
 
     public ToDo(ToDoRequestDto toDoRequestDto, User user) {
-        this.username = toDoRequestDto.getUsername();
-        this.password = toDoRequestDto.getPassword();
         this.title = toDoRequestDto.getTitle();
         this.contents = toDoRequestDto.getContents();
+        this.user = user;
     }
 
     public void update(ToDoRequestDto toDoRequestDto) {

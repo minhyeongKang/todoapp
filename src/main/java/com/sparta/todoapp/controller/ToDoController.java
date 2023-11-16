@@ -2,10 +2,8 @@ package com.sparta.todoapp.controller;
 
 import com.sparta.todoapp.dto.ToDoRequestDto;
 import com.sparta.todoapp.dto.ToDoResponseDto;
-import com.sparta.todoapp.entity.ToDo;
 import com.sparta.todoapp.security.UserDetailsImpl;
 import com.sparta.todoapp.service.ToDoService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,9 +21,8 @@ public class ToDoController {
     private final ToDoService toDoService;
 
     @PostMapping("/todocards")
-    public ToDoResponseDto createToDoCard(
-            @RequestBody ToDoRequestDto toDoRequestDto,
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @ResponseBody
+    public ToDoResponseDto createToDoCard(@RequestBody ToDoRequestDto toDoRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return toDoService.createToDoCard(toDoRequestDto, userDetails.getUser());
     }
 

@@ -18,9 +18,7 @@ public class ToDoService {
     private final ToDoRepository toDoRepository;
 
     public ToDoResponseDto createToDoCard(ToDoRequestDto toDoRequestDto, User user) {
-
         ToDo toDo = toDoRepository.save(new ToDo(toDoRequestDto, user));
-
         return new ToDoResponseDto(toDo);
     }
 
