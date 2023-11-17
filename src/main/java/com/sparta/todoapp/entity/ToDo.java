@@ -34,6 +34,7 @@ public class ToDo extends Timestamped {
     }
 
     public void update(ToDoRequestDto toDoRequestDto) {
+        this.title = toDoRequestDto.getTitle();
         this.contents = toDoRequestDto.getContents();
     }
 

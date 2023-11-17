@@ -7,13 +7,12 @@ import com.sparta.todoapp.service.ToDoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class ToDoController {
@@ -21,20 +20,18 @@ public class ToDoController {
     private final ToDoService toDoService;
 
     @PostMapping("/todocards")
-    @ResponseBody
     public ToDoResponseDto createToDoCard(@RequestBody ToDoRequestDto toDoRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return toDoService.createToDoCard(toDoRequestDto, userDetails.getUser());
     }
 
     @GetMapping("/todocards")
-    @ResponseBody
     public List<ToDoResponseDto> getToDoCards(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return toDoService.getToDoCards(userDetails.getUser());
     }
 
     @PutMapping("/todocards/{id}")
-    public Long updateToDoCard(@PathVariable Long id, @RequestBody ToDoRequestDto toDoRequestDto) {
-        return toDoService.updateToDoCard(id, toDoRequestDto);
+    public Long updateToDoCard(@PathVariable Long id, @RequestBody ToDoRequestDto toDoRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return toDoService.updateToDoCard(id, toDoRequestDto, userDetails.getUser());
     }
 
     @DeleteMapping("/todocards/{id}")

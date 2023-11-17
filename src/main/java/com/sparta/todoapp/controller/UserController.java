@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
 public class UserController {
@@ -22,7 +22,6 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/user/signup")
-    @ResponseBody
     public void signup(@RequestBody SignupRequestDto signupRequestDto) {
         try {
             userService.signup(signupRequestDto);
@@ -32,7 +31,6 @@ public class UserController {
     }
 
     @PostMapping("/user/login")
-    @ResponseBody
     public void login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse res) {
         try {
             userService.login(loginRequestDto, res);
@@ -43,7 +41,6 @@ public class UserController {
 
     // 회원 관련 정보 받기
     @GetMapping("/user-info")
-    @ResponseBody
     public UserInfoDto getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         String username = userDetails.getUser().getUsername();
         UserRoleEnum role = userDetails.getUser().getRole();

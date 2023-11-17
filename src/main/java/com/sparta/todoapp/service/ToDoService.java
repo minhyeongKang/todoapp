@@ -35,13 +35,18 @@ public class ToDoService {
     }
 
     @Transactional
-    public Long updateToDoCard(Long id, ToDoRequestDto toDoRequestDto) {
-        // 해당 할일카드가 DB에 존재하는지 확인
-        ToDo toDo = findToDoCard(id);
-        // 할일카드 내용 수정
-        toDo.update(toDoRequestDto);
-
-        return id;
+    public Long updateToDoCard(Long id, ToDoRequestDto toDoRequestDto, User user) {
+        // 할일 카드 찾기
+        ToDo toDo = toDoRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("해당 할일카드가 없습니다.")
+        );
+        // 할일 카드의 User와 비교
+        if (user.getUsername().equals(toDo.getUser().getUsername())) {
+            toDo.update(toDoRequestDto);
+            return toDo.getId();
+        } else {
+            throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
+        }
     }
 
     public Long deleteToDoCard(Long id) {
