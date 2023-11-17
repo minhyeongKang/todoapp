@@ -49,13 +49,18 @@ public class ToDoService {
         }
     }
 
-    public Long deleteToDoCard(Long id) {
-        // 해당 할일카드가 DB에 존재하는지 확인
-        ToDo toDo = findToDoCard(id);
-        // 할일카드 삭제
-        toDoRepository.delete(toDo);
-
-        return id;
+    public Long deleteToDoCard(Long id, User user) {
+        // 할일 카드 찾기
+        ToDo toDo = toDoRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("해당 할일카드가 없습니다.")
+        );
+        // 할일 카드의 User와 비교
+        if (user.getUsername().equals(toDo.getUser().getUsername())) {
+            toDoRepository.delete(toDo);
+            return toDo.getId();
+        } else {
+            throw new IllegalArgumentException("작성자만 삭제할 수 있습니다.");
+        }
     }
 
     private ToDo findToDoCard(Long id) {

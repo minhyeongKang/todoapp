@@ -35,7 +35,7 @@ public class ToDoController {
     }
 
     @DeleteMapping("/todocards/{id}")
-    public Long deleteToDoCard(@PathVariable Long id) {
-        return toDoService.deleteToDoCard(id);
+    public Long deleteToDoCard(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return toDoService.deleteToDoCard(id, userDetails.getUser());
     }
 }
