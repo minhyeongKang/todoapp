@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,9 +23,15 @@ public class ToDoService {
         return new ToDoResponseDto(toDo);
     }
 
-    public List<ToDoResponseDto> getToDoCards() {
-        // DB 조회
-        return toDoRepository.findAllByOrderByModifiedAtDesc().stream().map(ToDoResponseDto::new).toList();
+    public List<ToDoResponseDto> getToDoCards(User user) {
+        List<ToDo> toDoList = toDoRepository.findAllByUser(user);
+        List<ToDoResponseDto> responseDtoList = new ArrayList<>();
+
+        for (ToDo toDo : toDoList) {
+            responseDtoList.add(new ToDoResponseDto(toDo));
+        }
+
+        return responseDtoList;
     }
 
     @Transactional

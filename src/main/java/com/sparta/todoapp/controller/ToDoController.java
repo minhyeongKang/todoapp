@@ -27,8 +27,9 @@ public class ToDoController {
     }
 
     @GetMapping("/todocards")
-    public List<ToDoResponseDto> getToDoCards() {
-        return toDoService.getToDoCards();
+    @ResponseBody
+    public List<ToDoResponseDto> getToDoCards(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return toDoService.getToDoCards(userDetails.getUser());
     }
 
     @PutMapping("/todocards/{id}")
